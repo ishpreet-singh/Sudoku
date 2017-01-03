@@ -8,12 +8,6 @@ MARGIN = 20  # Pixels around the board
 SIDE = 50  # Width of every board cell.
 WIDTH = HEIGHT = MARGIN * 2 + SIDE * 9  # Width and height of the whole board
 
-def parse_arguments():
-	arg_parser = argparse.ArgumentParser()
-	arg_parser.add_argument("--level", choices=LEVELS, required=True)
-	args = vars(arg_parser.parse_args())
-	return args['level']
-
 class SudokuBoard(object):
 
 	def __init__(self, board_file):
@@ -22,7 +16,7 @@ class SudokuBoard(object):
 	def __create_board(self, board_file):
 		board = []
 		for line in board_file:
-			line = line.strip()		# Removes newline character from board_file
+			line = line.strip()		
 			if len(line) != 9:
 				raise SudokuError("Each line in the sudoku puzzle must be 9 chars long.")
 			board.append([])
@@ -105,9 +99,7 @@ class SudokuUI(Frame):
 		x, y = event.x, event.y
 		if (MARGIN < x < WIDTH - MARGIN and MARGIN < y < HEIGHT - MARGIN):
 			self.canvas.focus_set()
-			# get row and col numbers from x,y coordinates
 			row, col = (y - MARGIN) / SIDE, (x - MARGIN) / SIDE
-			# if cell was selected already - deselect it
 			if (row, col) == (self.row, self.col):
 				self.row, self.col = -1, -1
 			elif self.game.puzzle[row][col] == 0:
@@ -249,8 +241,7 @@ class SudokuGame(object):
 
 if __name__ == '__main__':
 	
-	level_name = parse_arguments()
-	with open('%s.txt' % level_name, 'r') as levels_name:
+	with open('easy.txt', 'r') as levels_name:
 		game = SudokuGame(levels_name)
 		game.start()
 		root = Tk()
